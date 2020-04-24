@@ -1,0 +1,53 @@
+- name: 'Download binary from https://releases.mattermost.org'
+  get_url:
+    url: 'https://releases.mattermost.com/{{ mattermost_version }}/mattermost-team-{{ mattermost_version }}-linux-amd64.tar.gz'
+    dest: /tmp/
+
+- name: Unpack mattermost archive.
+  unarchive:
+    src: /tmp/mattermost-team-{{ mattermost_version }}-linux-amd64.tar.gz
+    dest: /opt/
+    copy: no
+  args:
+    creates: /opt/mattermost/bin/platform
+
+- name: Create system group
+  group:
+    name: "{{ mattermost_system_group }}"
+    state: present
+
+- name: Create system user
+  user:
+    name: "{{ mattermost_system_user }}"
+    group: "{{ mattermost_system_group }}"
+    system: yes
+    state: present
+    create_home: no
+
+- name: Apply mattermost config.json template
+  template:
+    src: mattermost-config.json.j2
+    dest: /opt/mattermost/config/config.json
+    owner: "{{ mattermost_system_user }}"
+    group: "{{ mattermost_system_user }}"
+    mode: 0644
+
+- name: Change mattermost directory permissions
+  file:
+    path: /opt/mattermost
+    state: directory
+    owner: "{{ mattermost_system_user }}"
+    group: "{{ mattermost_system_user }}"
+    recurse: yes
+
+- name: Place systemd unit
+  template:
+    src: "mattermost.service.j2"
+    dest: /etc/systemd/system/mattermost.service
+
+- name: Enable systemd service
+  systemd:
+    name: mattermost
+    daemon_reload: yes
+    enabled: yes
+    state: restarted

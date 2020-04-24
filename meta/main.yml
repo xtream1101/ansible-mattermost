@@ -1,0 +1,18 @@
+galaxy_info:
+  author: Eddy Hintze
+  description: Role to deploy Mattermost
+  role_name: mattermost
+  license: MIT
+  min_ansible_version: 2.6.0
+  platforms:
+    - name: Ubuntu
+      versions:
+        - bionic
+  galaxy_tags:
+    - mattermost
+    - chat
+
+dependencies:
+  - role: nginxinc.nginx
+  - role: clutterbox.dehydrated
+    when: mattermost_http_type == "https"

@@ -1,0 +1,37 @@
+---
+mattermost_version: "5.22.0"
+mattermost_system_user: mattermost
+mattermost_system_group: "{{ mattermost_system_user }}"
+
+# Database credentials
+mattermost_db_name: "mattermost-test"
+mattermost_db_user: "mmuser"
+mattermost_db_pass: "secret"
+mattermost_db_host: "127.0.0.1"
+mattermost_db_port: "5432"
+
+# Systemd settings
+mattermost_limit_nofile: "49152"
+
+# Mattermost Conf
+mattermost_domain: ""
+mattermost_http_type: "http"  # http or https
+# Team settings
+mattermost_conf_team_sitename: "Mattermost deployed by Ansible"
+mattermost_conf_team_maxusers: 50
+# SMTP settings
+mattermost_conf_smtp_auth: "false"
+mattermost_conf_smtp_user: ""
+mattermost_conf_smtp_pass: ""
+mattermost_conf_smtp_host: ""
+mattermost_conf_smtp_port: ""
+# Connection security for SMTP
+# Can be "", "TLS" or "STARTTLS"
+mattermost_conf_smtp_tls: ""
+
+# Metric settings
+mattermost_conf_metrics_bind_address: "127.0.0.1"
+mattermost_conf_sendemailnotifications: "true"
+mattermost_conf_feedbackname: "Mattermost"
+mattermost_conf_feedbackemail: "noreply@example.com"
+mattermost_conf_replytoaddress: "noreply@example.com"
