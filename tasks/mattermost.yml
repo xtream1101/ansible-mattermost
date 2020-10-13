@@ -3,6 +3,15 @@
     url: 'https://releases.mattermost.com/{{ mattermost_version }}/mattermost-team-{{ mattermost_version }}-linux-amd64.tar.gz'
     dest: /tmp/
 
+- name: Check if mattermost is already installed
+  stat:
+    path: /opt/mattermost
+  register: mattermost_exists
+
+- name: Clean up old files if this is an upgrade
+  shell: find /opt/mattermost/ /opt/mattermost/client/ -mindepth 1 -maxdepth 1 \! \( -type d \( -path /opt/mattermost/client -o -path /opt/mattermost/client/plugins -o -path /opt/mattermost/config -o -path /opt/mattermost/logs -o -path /opt/mattermost/plugins -o -path /opt/mattermost/data \) -prune \) | sort | sudo xargs rm -r
+  when: mattermost_exists.stat.exists
+
 - name: Unpack mattermost archive.
   unarchive:
     src: /tmp/mattermost-team-{{ mattermost_version }}-linux-amd64.tar.gz

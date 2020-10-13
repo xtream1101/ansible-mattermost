@@ -1,6 +1,4 @@
 ---
 - src: nginxinc.nginx
-  version: v0.14.0
 
 - src: clutterbox.dehydrated
-  version: v0.4.0
